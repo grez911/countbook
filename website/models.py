@@ -1,8 +1,9 @@
 from django.db import models
 
-class Operations(models.Model):
-    description = models.CharField()
+class Operation(models.Model):
+    operation_name = models.TextField()
+    show = models.BooleanField()
 
-class Records(models.Model):
+class Record(models.Model):
     date = models.DateField(auto_now_add=True)
-    operation = models.ForeignKey(Operations)
+    operation_id = models.ForeignKey(Operation)
