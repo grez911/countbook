@@ -10,6 +10,11 @@
         <link rel="stylesheet" type="text/css" href="{% static 'website/main.css' %}" /a>
     </head>
     <body>
+        <ul>
+            {% for operation in operation_list %}
+            <li>{{ operation.operation_name }}</li>
+            {% endfor %}
+        </ul>
         <form method="post" action="{% url 'website:append_operation' %}">
             {% csrf_token %}
             <input type="text" name="operation_name">

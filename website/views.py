@@ -7,9 +7,10 @@ from .models import Operation, Record
 
 class IndexView(generic.ListView):
     template_name = 'website/index.html'
-    
+    context_object_name = 'operation_list'
+
     def get_queryset(self):
-        return Record.objects
+        return Operation.objects.all()
 
 def append_operation(request):
     op = Operation(operation_name=request.POST['operation_name'], show=True)
