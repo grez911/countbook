@@ -5,7 +5,7 @@ def ws_message(message):
         "text": "[user] %s" % message.content['text'],
     })
 
-def ws_add(message):
+def ws_connect(message):
     message.reply_channel.send({"accept": True})
     Group("chat").add(message.reply_channel)
 
