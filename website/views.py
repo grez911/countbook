@@ -16,3 +16,10 @@ def append_operation(request):
     op = Operation(operation_name=request.POST['operation_name'], show=True)
     op.save()
     return HttpResponseRedirect(reverse('website:index'))
+
+import json
+from django.core import serializers
+
+def get(params):
+    list = serializers.serialize("json", Operation.objects.all())
+    return list

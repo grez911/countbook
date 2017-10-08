@@ -1,8 +1,9 @@
 from channels import Group
+from .views import get
 
 def ws_message(message):
     Group("chat").send({
-        "text": "[user] %s" % message.content['text'],
+        "text": get(message.content['text']),
     })
 
 def ws_connect(message):

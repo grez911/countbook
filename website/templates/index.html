@@ -13,6 +13,38 @@
         <script src="{% static 'website/vue.js' %}"></script>
     </head>
     <body>
-        hello
+        <div id="root" v-text="msg">
+        </div>
+        <script>
+            let root = new Vue({
+                el: '#root',
+                data: {
+                    msg: '',
+                    ws: null
+                },
+                //delimiters: ['((', '))'],
+                mounted: function() {
+                    this.ws = new WebSocket('ws://' + window.location.host);
+                    this.ws.onmessage = (e) => this.msg = e.data;
+                    this.ws.onopen = () => this.ws.send(
+                        JSON.stringify({
+                            operation: "get",
+                            params: {
+                                start: {
+                                    year: "2017",
+                                    month: "10",
+                                    day: "08"
+                                },
+                                end: {
+                                    year: "2017",
+                                    month: "10",
+                                    day: "08"
+                                }
+                            }
+                        })
+                    );
+                }
+            })
+        </script>
     </body>
 </html>
