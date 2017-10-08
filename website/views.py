@@ -1,25 +1,24 @@
-from django.shortcuts import get_object_or_404, render
-from django.views import generic
-from django.http import HttpResponseRedirect
-from django.urls import reverse
+import json
+from django.core import serializers
+from django.db.models import Count
 
 from .models import Operation, Record
 
-class IndexView(generic.ListView):
-    template_name = 'website/index.html'
-    context_object_name = 'operation_list'
-
-    def get_queryset(self):
-        return Operation.objects.all()
-
-def append_operation(request):
-    op = Operation(operation_name=request.POST['operation_name'], show=True)
-    op.save()
-    return HttpResponseRedirect(reverse('website:index'))
-
-import json
-from django.core import serializers
-
 def get(params):
-    list = serializers.serialize("json", Operation.objects.all())
+    all_records = Record.objects.all()\
+        .filter(date__range=('2017-10-08', '2017-10-08'))\
+        .values('operation')\
+        .order_by()\
+        .annotate(count=Count('operation'))
+    operation_ids = [record['operation'] for record in all_records]
+    corresponding_operations = Operation.objects.filter(id__in=operation_ids)
+    operation_id_to_name = {op.id: op.name for op in corresponding_operations}
+    result = []
+    for record in all_records:
+        result.append({
+            "id": record['operation'],
+            "name": operation_id_to_name[record['operation']],
+            "count": record['count']
+        })
+    list = json.dumps(result)
     return list
