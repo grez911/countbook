@@ -1,10 +1,18 @@
+import json
 from channels import Group
-from .views import get_today
+from .views import get_today, append_record
 
 def ws_message(message):
-    Group("chat").send({
-        "text": get_today(),
-    })
+    request = json.loads(message.content['text'])
+    if request['operation'] == 'append_record':
+        append_record(request['params']['id'])
+        Group('chat').send({
+            'text': get_today(),
+        })
+    elif request['operation'] == 'get_today':
+        Group("chat").send({
+            "text": get_today(),
+        })
 
 def ws_connect(message):
     message.reply_channel.send({"accept": True})

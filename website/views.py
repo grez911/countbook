@@ -29,6 +29,10 @@ def get_today():
     result = json.dumps(result)
     return result
 
+def append_record(id):
+    record = Record(operation=Operation.objects.get(id=id))
+    record.save()
+
 def get_month(params):
     all_records = Record.objects.all()\
         .filter(date__range=('2017-10-08', '2017-10-08'))\

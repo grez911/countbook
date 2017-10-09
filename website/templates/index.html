@@ -17,6 +17,7 @@
             <ul>
                 <li v-for="op in today" v-if="op[2] == true">
                     (( op[1] )) - (( op[3] ))
+                    <button v-on:click="add(op[0])">+</button>
                 </li>
             </ul>
         </div>
@@ -31,16 +32,28 @@
                 delimiters: ['((', '))'],
                 mounted: function() {
                     ws.onmessage = (e) => {
-                        response = JSON.parse(e.data)
+                        response = JSON.parse(e.data);
                         if (response[0] == 'get_today') {
                             this.today = response.slice(1);
                         }
                     }
                     ws.onopen = () => ws.send(
                         JSON.stringify({
-                            operation: "get_today"
+                            operation: 'get_today'
                         })
                     );
+                },
+                methods: {
+                    add(id) {
+                        ws.send(
+                            JSON.stringify({
+                                operation: 'append_record',
+                                params: {
+                                    id: id
+                                }
+                            })
+                        );
+                    }
                 }
             })
 /*
