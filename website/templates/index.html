@@ -13,38 +13,84 @@
         <script src="{% static 'website/vue.js' %}"></script>
     </head>
     <body>
-        <div id="root" v-text="msg">
+        <div id="root">
+            <ul>
+                <li v-for="op in today" v-if="op[2] == true">
+                    (( op[1] )) - (( op[3] ))
+                </li>
+            </ul>
         </div>
         <script>
+            ws = new WebSocket('ws://' + window.location.host);
+            
             let root = new Vue({
                 el: '#root',
                 data: {
-                    msg: '',
-                    ws: null
+                    today: ''
                 },
-                //delimiters: ['((', '))'],
+                delimiters: ['((', '))'],
                 mounted: function() {
-                    this.ws = new WebSocket('ws://' + window.location.host);
-                    this.ws.onmessage = (e) => this.msg = e.data;
-                    this.ws.onopen = () => this.ws.send(
+                    ws.onmessage = (e) => {
+                        response = JSON.parse(e.data)
+                        if (response[0] == 'get_today') {
+                            this.today = response.slice(1);
+                        }
+                    }
+                    ws.onopen = () => ws.send(
                         JSON.stringify({
-                            operation: "get",
-                            params: {
-                                start: {
-                                    year: "2017",
-                                    month: "10",
-                                    day: "08"
-                                },
-                                end: {
-                                    year: "2017",
-                                    month: "10",
-                                    day: "08"
-                                }
-                            }
+                            operation: "get_today"
                         })
                     );
                 }
             })
+/*
+                        JSON.stringify({
+                            operation: "get_year",
+                            params: {
+                                year: "2017"
+                            }
+                        })
+
+                        JSON.stringify({
+                            operation: "get_month",
+                            params: {
+                                year: "2017",
+                                month: "10"
+                            }
+                        })
+
+                        JSON.stringify({
+                            operation: "get_today"
+                        })
+
+                        JSON.stringify({
+                            operation: "append_operation",
+                            params: {
+                                name: "jksghjkfg"
+                            }
+                        })
+
+                        JSON.stringify({
+                            operation: "add_operation",
+                            params: {
+                                id: "12"
+                            }
+                        })
+
+                        JSON.stringify({
+                            operation: "hide_operation",
+                            params: {
+                                id: "10"
+                            }
+                        })
+
+                        JSON.stringify({
+                            operation: "show_operation",
+                            params: {
+                                id: "10"
+                            }
+                        })
+*/
         </script>
     </body>
 </html>

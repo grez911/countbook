@@ -1,9 +1,9 @@
 from channels import Group
-from .views import get
+from .views import get_today
 
 def ws_message(message):
     Group("chat").send({
-        "text": get(message.content['text']),
+        "text": get_today(),
     })
 
 def ws_connect(message):
