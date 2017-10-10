@@ -17,9 +17,11 @@
             <ul>
                 <li v-for="op in today" v-if="op[2] == true">
                     (( op[1] )) - (( op[3] ))
-                    <button v-on:click="add(op[0])">+</button>
+                    <button v-on:click="append_record(op[0])">+</button>
                 </li>
             </ul>
+            <input type="text" id="append_operation" v-model="new_operation">
+            <button v-on:click="append_operation()">Append</button>
         </div>
         <script>
             ws = new WebSocket('ws://' + window.location.host);
@@ -27,7 +29,8 @@
             let root = new Vue({
                 el: '#root',
                 data: {
-                    today: ''
+                    today: '',
+                    new_operation: ''
                 },
                 delimiters: ['((', '))'],
                 mounted: function() {
@@ -44,7 +47,7 @@
                     );
                 },
                 methods: {
-                    add(id) {
+                    append_record(id) {
                         ws.send(
                             JSON.stringify({
                                 operation: 'append_record',
@@ -53,6 +56,17 @@
                                 }
                             })
                         );
+                    },
+                    append_operation() {
+                        ws.send(
+                            JSON.stringify({
+                                operation: 'append_operation',
+                                params: {
+                                    name: this.new_operation
+                                }
+                            })
+                        );
+                        this.new_operation = '';
                     }
                 }
             })
