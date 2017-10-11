@@ -16,14 +16,17 @@
         <div id="root">
             <tabs>
                 <tab name="Today" :selected="true">
-                    <opetations-list></opetations-list>
+                    <operations-list></operations-list>
                     <append-operation></append-operation>
                 </tab>
                 <tab name="Stats">
-                    Stats
+                    <stats></stats>
                 </tab>
             </tabs>
         </div>
+        <script src="{% static 'website/tabs.js' %}"></script>
+        <script src="{% static 'website/stats_tab.js' %}"></script>
+        <script src="{% static 'website/today_tab.js' %}"></script>
         <script src="{% static 'website/main.js' %}"></script>
     </body>
 </html>

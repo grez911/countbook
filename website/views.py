@@ -48,30 +48,13 @@ def append_operation(name):
     record = Operation(show=True, name=name)
     record.save()
 
-def get_year(year, month):
+def get_month(year, month):
     '''
     Returns month statistics
     '''
-    last_month_day = calendar.monthrange(year, month)[1]
-    start_date = datetime.datetime(year, month, 1)
-    end_date = datetime.datetime(year, month, last_month_day)
-    all_records = Record.objects.all()\
-        .filter(date__range=(start_date, end_date))\
-        .values('operation')\
-        .order_by()\
-        .annotate(count=Count('operation'))
-    operation_ids = [record['operation'] for record in all_records]
-    corresponding_operations = Operation.objects.filter(id__in=operation_ids)
-    operation_id_to_name = {op.id: op.name for op in corresponding_operations}
-    result = []
-    for record in all_records:
-        result.append({
-            "id": record['operation'],
-            "name": operation_id_to_name[record['operation']],
-            "count": record['count']
-        })
-    list = json.dumps(result)
-    return list
+    return json.dumps(["get_month"])
+    start_day = 1
+    end_day = calendar.monthrange(year, month)[1]
 
 def get_year(year, month):
     '''
