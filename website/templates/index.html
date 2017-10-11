@@ -15,10 +15,11 @@
     <body>
         <div id="root">
             <tabs>
-                <tab name="today" :selected="true">
-                    Today
+                <tab name="Today" :selected="true">
+                    <opetations-list></opetations-list>
+                    <append-operation></append-operation>
                 </tab>
-                <tab name="stats">
+                <tab name="Stats">
                     Stats
                 </tab>
             </tabs>
@@ -26,16 +27,3 @@
         <script src="{% static 'website/main.js' %}"></script>
     </body>
 </html>
-
-
-
-                <!--
-                <div id="root">
-                    <div v-for="op in today" v-if="op[2] == true">
-                        (( op[1] )) - (( op[3] ))
-                        <button v-on:click="append_record(op[0])">+</button>
-                    </div>
-                    <input type="text" id="append_operation" v-model="new_operation">
-                    <button v-on:click="append_operation()">Append</button>
-                </div>
-                -->
