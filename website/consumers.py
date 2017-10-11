@@ -1,6 +1,6 @@
 import json
 from channels import Group
-from .views import get_day, append_record, append_operation
+from .views import get_day, append_record, append_operation, get_month
 
 def ws_message(message):
     request = json.loads(message.content['text'])
@@ -10,7 +10,6 @@ def ws_message(message):
             'text': get_day()
         })
     elif request['operation'] == 'get_day':
-        request = json.loads(message.content['text'])
         year = request['params']['year']
         month = request['params']['month']
         day = request['params']['day']
@@ -21,6 +20,13 @@ def ws_message(message):
         append_operation(request['params']['name'])
         Group('countbook').send({
             'text': get_day()
+        })
+    elif request['operation'] == 'get_month':
+        year = request['params']['year']
+        month = request['params']['month']
+        Group('countbook').send({
+            'text': get_month(year, month)
+            #'text': json.dumps(['get_month'])
         })
 
 def ws_connect(message):

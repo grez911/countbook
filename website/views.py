@@ -52,9 +52,14 @@ def get_month(year, month):
     '''
     Returns month statistics
     '''
-    return json.dumps(["get_month"])
     start_day = 1
     end_day = calendar.monthrange(year, month)[1]
+    stat = {}
+    for day in range(start_day, end_day):
+        stat[day] = get_day(year, month, day)
+    result = ['get_month']
+    result.append(stat)
+    return json.dumps(result)
 
 def get_year(year, month):
     '''
