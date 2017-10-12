@@ -26,7 +26,6 @@ def ws_message(message):
         month = request['params']['month']
         Group('countbook').send({
             'text': get_month(year, month)
-            #'text': json.dumps(['get_month'])
         })
 
 def ws_connect(message):

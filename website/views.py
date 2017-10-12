@@ -50,38 +50,37 @@ def append_operation(name):
 
 def get_month(year, month):
     '''
-    Returns month statistics
+    Returns month statistics per each day
     '''
     start_day = 1
     end_day = calendar.monthrange(year, month)[1]
-    stat = {}
-    for day in range(start_day, end_day):
-        stat[day] = get_day(year, month, day)
-    result = ['get_month']
-    result.append(stat)
-    return json.dumps(result)
 
-def get_year(year, month):
-    '''
-    (Not implemented yet!) Returns year statistics
-    '''
-    last_month_day = calendar.monthrange(year, month)[1]
-    start_date = datetime.datetime(year, month, 1)
-    end_date = datetime.datetime(year, month, last_month_day)
+    all_operations = Operation.objects.all()
     all_records = Record.objects.all()\
-        .filter(date__range=(start_date, end_date))\
-        .values('operation')\
-        .order_by()\
-        .annotate(count=Count('operation'))
-    operation_ids = [record['operation'] for record in all_records]
-    corresponding_operations = Operation.objects.filter(id__in=operation_ids)
-    operation_id_to_name = {op.id: op.name for op in corresponding_operations}
-    result = []
-    for record in all_records:
-        result.append({
-            "id": record['operation'],
-            "name": operation_id_to_name[record['operation']],
-            "count": record['count']
-        })
-    list = json.dumps(result)
-    return list
+        .filter(date__year=year, date__month=month)
+
+    stats = []
+    
+    for op in all_operations:
+        day_records = all_records\
+            .filter(operation_id=op.id)\
+            .values('date')\
+            .order_by()\
+            .annotate(count=Count('date'))
+        if day_records:
+            stats.append([{'name': op.name, 'data': [{'day': rec['date'].day, 'count': rec['count']} for rec in day_records], 'id': op.id}])
+
+    return json.dumps(stats)
+
+# def get_month(year, month):
+    # '''
+    # Returns month statistics
+    # '''
+    # start_day = 1
+    # end_day = calendar.monthrange(year, month)[1]
+    # stat = {}
+    # for day in range(start_day, end_day):
+        # stat[day] = get_day(year, month, day)
+    # result = ['get_month']
+    # result.append(stat)
+    # return json.dumps(result)
