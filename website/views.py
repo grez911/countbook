@@ -60,7 +60,7 @@ def get_month(year, month):
         .filter(date__year=year, date__month=month)
 
     stats = []
-    
+
     for op in all_operations:
         day_records = all_records\
             .filter(operation_id=op.id)\
@@ -68,19 +68,21 @@ def get_month(year, month):
             .order_by()\
             .annotate(count=Count('date'))
         if day_records:
-            stats.append([{'name': op.name, 'data': [{'day': rec['date'].day, 'count': rec['count']} for rec in day_records], 'id': op.id}])
+            # Skip operation if it has not had records in this month
+            cur_op = dict()
+            cur_op = {
+                'name': op.name,
+                'stats': {
+                    rec['date'].day: rec['count']
+                    for rec in day_records
+                },
+                'id': op.id
+            }
+            for day in range(start_day, end_day + 1):
+                # Append days with zero operation count
+                if not day in cur_op['stats']:
+                    cur_op['stats'][day] = 0
+            stats.append(cur_op)
 
-    return json.dumps(stats)
-
-# def get_month(year, month):
-    # '''
-    # Returns month statistics
-    # '''
-    # start_day = 1
-    # end_day = calendar.monthrange(year, month)[1]
-    # stat = {}
-    # for day in range(start_day, end_day):
-        # stat[day] = get_day(year, month, day)
-    # result = ['get_month']
-    # result.append(stat)
-    # return json.dumps(result)
+    result = {'type': 'get_month', 'data': stats}
+    return json.dumps(result)
