@@ -1,7 +1,12 @@
 Vue.component('stats', {
     template: `
         <div>
-            <canvas id="mychart" ref="mychart" width="400" height="150"></canvas>
+            <div>
+                <button v-on:click="prevMonth()">&lt;</button>
+                    (( months[month] )) (( year ))
+                <button v-on:click="nextMonth()">&gt;</button>
+            </div>
+            <canvas id="mychart" ref="mychart" width="400" height="180"></canvas>
         </div>
     `,
 
@@ -10,7 +15,23 @@ Vue.component('stats', {
     data() {
         return {
             myChart: null,
-            stats: null
+            stats: null,
+            year: new Date().getFullYear(),
+            month: new Date().getMonth(),
+            months: [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December'
+            ]
         };
     },
 
@@ -21,31 +42,56 @@ Vue.component('stats', {
                 this.createChart();
             }
             if (response['type'] == 'get_day') {
-                ws.send(
-                    JSON.stringify({
-                        operation: 'get_month',
-                        params: {
-                            year: year,
-                            month: month
-                        }
-                    })
-                )
+                this.getStats();
             }
         })
     },
 
     methods: {
+        getStats: function() {
+            ws.send(
+                JSON.stringify({
+                    operation: 'get_month',
+                    params: {
+                        year: this.year,
+                        month: this.month + 1
+                    }
+                })
+            )
+        },
+
+        prevMonth: function () {
+            if (this.month > 0) {
+                this.month--;
+            } else {
+                this.month = 11;
+                this.year--;
+            }
+            this.getStats();
+        },
+
+        nextMonth: function () {
+            if (this.month < 11) {
+                this.month++;
+            } else {
+                this.month = 0;
+                this.year++;
+            }
+            this.getStats();
+        },
+
         createChart: function () {
             let self = this;
+            try {
+                myChart.destroy();
+            } 
+            catch (e) {
+            }
             myChart = null;
             myChart = new Chart(self.$refs.mychart.getContext('2d'), {
                 type: 'bar',
                 data: self.stats,
                 options: {
-                    title:{
-                        display: true,
-                        text: month
-                    },
                     tooltips: {
                         mode: 'index',
                         intersect: false
@@ -71,6 +117,9 @@ Vue.component('stats', {
                 'labels': [],
                 'datasets': []
             };
+            if (raw_stats.length == 0) {
+                return;
+            }
             for (let day in raw_stats[0]['stats']) {
                 this.stats['labels'].push(day);
             }

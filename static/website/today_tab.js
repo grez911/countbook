@@ -12,7 +12,10 @@ Vue.component('operations-list', {
 
     data() {
         return {
-            today: ''
+            today: '',
+            year: new Date().getFullYear(),
+            month: new Date().getMonth() + 1,
+            day: new Date().getDate()
         };
     },
 
@@ -22,9 +25,9 @@ Vue.component('operations-list', {
                 JSON.stringify({
                     operation: 'get_day',
                     params: {
-                        year: year,
-                        month: month,
-                        day: day
+                        year: this.year,
+                        month: this.month,
+                        day: this.day
                     }
                 })
             )
