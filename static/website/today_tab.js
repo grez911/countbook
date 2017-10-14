@@ -2,8 +2,9 @@ Vue.component('operations-list', {
     template: `
         <div>
             <div v-for="op in today" v-if="op['show'] == true">
+                <button v-on:click="delOperation(op['id'])">Del</button>
                 (( op['name'] )) - (( op['count'] ))
-                <button v-on:click="append_record(op['id'])">+</button>
+                <button v-on:click="appendRecord(op['id'])">+</button>
             </div>
         </div>
     `,
@@ -23,7 +24,7 @@ Vue.component('operations-list', {
         bus.$on('websocket_ready', () => 
             ws.send(
                 JSON.stringify({
-                    operation: 'get_day',
+                    type: 'get_day',
                     params: {
                         year: this.year,
                         month: this.month,
@@ -40,10 +41,21 @@ Vue.component('operations-list', {
     },
 
     methods: {
-        append_record(id) {
+        delOperation(id) {
             ws.send(
                 JSON.stringify({
-                    operation: 'append_record',
+                    type: 'del_operation',
+                    params: {
+                        id: id
+                    }
+                })
+            );
+        },
+
+        appendRecord(id) {
+            ws.send(
+                JSON.stringify({
+                    type: 'append_record',
                     params: {
                         id: id
                     }
@@ -57,7 +69,7 @@ Vue.component('append-operation', {
     template: `
         <div>
             <input type="text" id="append_operation" v-model="new_operation">
-            <button v-on:click="append_operation()">Append</button>
+            <button v-on:click="appendOperation()">Append</button>
         </div>
     `,
 
@@ -68,10 +80,10 @@ Vue.component('append-operation', {
     },
 
     methods: {
-        append_operation() {
+        appendOperation() {
             ws.send(
                 JSON.stringify({
-                    operation: 'append_operation',
+                    type: 'append_operation',
                     params: {
                         name: this.new_operation
                     }

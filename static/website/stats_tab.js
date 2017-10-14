@@ -51,7 +51,7 @@ Vue.component('stats', {
         getStats: function() {
             ws.send(
                 JSON.stringify({
-                    operation: 'get_month',
+                    type: 'get_month',
                     params: {
                         year: this.year,
                         month: this.month + 1

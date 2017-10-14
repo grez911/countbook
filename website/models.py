@@ -6,4 +6,4 @@ class Operation(models.Model):
 
 class Record(models.Model):
     date = models.DateField(auto_now_add=True)
-    operation = models.ForeignKey(Operation)
+    operation = models.ForeignKey(Operation, on_delete=models.CASCADE)

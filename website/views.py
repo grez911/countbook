@@ -44,6 +44,7 @@ def get_day(year=None, month=None, day=None):
                 'count': 0
             })
 
+    result['data'] = sorted(result['data'], key=lambda k: k['name'])
     result = json.dumps(result)
     return result
 
@@ -99,3 +100,10 @@ def get_month(year, month):
 
     result = {'type': 'get_month', 'data': stats}
     return json.dumps(result)
+
+def del_operation(id):
+    '''
+    Deletes an operation with all associated recors
+    '''
+    op = Operation.objects.get(id=id)
+    op.delete()
