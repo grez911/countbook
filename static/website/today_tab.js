@@ -1,8 +1,13 @@
+"use strict";
+
 Vue.component('operations-list', {
     template: `
         <div>
             <div v-for="op in today" v-if="op['show'] == true">
                 <button v-on:click="delOperation(op['id'])">Del</button>
+                <a class="button is-danger" v-on:click="delOperation(op['id'])">
+                    <i class="icon-trash icon-large"></i> Delete
+                </a>
                 (( op['name'] )) - (( op['count'] ))
                 <button v-on:click="appendRecord(op['id'])">+</button>
             </div>

@@ -1,3 +1,5 @@
+"use strict";
+
 Vue.component('stats', {
     template: `
         <div>
@@ -87,8 +89,7 @@ Vue.component('stats', {
             } 
             catch (e) {
             }
-            myChart = null;
-            myChart = new Chart(self.$refs.mychart.getContext('2d'), {
+            let myChart = new Chart(self.$refs.mychart.getContext('2d'), {
                 type: 'bar',
                 data: self.stats,
                 options: {
