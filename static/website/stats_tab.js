@@ -87,8 +87,7 @@ Vue.component('stats', {
             try {
                 myChart.destroy();
             } 
-            catch (e) {
-            }
+            catch (e) {}
             let myChart = new Chart(self.$refs.mychart.getContext('2d'), {
                 type: 'bar',
                 data: self.stats,

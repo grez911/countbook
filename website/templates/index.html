@@ -8,14 +8,13 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="{% static 'website/main.css' %}" /a>
-        <link rel="stylesheet" type="text/css" href="{% static 'website/bulma.min.css' %}" /a>
-        <!--<link rel="stylesheet" type="stylesheet" href="{% static 'website/font-awesome.min.css' %}" /a>-->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'website/bulma-0.6.0/css/bulma.css' %}" /a>
+        <!--<link rel="stylesheet" type="text/css" href="{% static 'website/bulma.min.css' %}" /a>-->
+        <link rel="stylesheet" href="{% static 'website/font-awesome-4.7.0/css/font-awesome.min.css' %}">
         <script src="{% static 'website/vue.js' %}"></script>
     </head>
     <body>
         <div id="root">
-            <i class="fa fa-camera-retro"></i>
             <tabs>
                 <tab name="Today" :selected="true">
                     <operations-list></operations-list>

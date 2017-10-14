@@ -4,12 +4,13 @@ Vue.component('operations-list', {
     template: `
         <div>
             <div v-for="op in today" v-if="op['show'] == true">
-                <button v-on:click="delOperation(op['id'])">Del</button>
-                <a class="button is-danger" v-on:click="delOperation(op['id'])">
-                    <i class="icon-trash icon-large"></i> Delete
+                <a v-on:click="delOperation(op['id'])">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
                 </a>
                 (( op['name'] )) - (( op['count'] ))
-                <button v-on:click="appendRecord(op['id'])">+</button>
+                <a v-on:click="appendRecord(op['id'])">
+                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                </a>
             </div>
         </div>
     `,
@@ -72,9 +73,15 @@ Vue.component('operations-list', {
 
 Vue.component('append-operation', {
     template: `
-        <div>
-            <input type="text" id="append_operation" v-model="new_operation">
-            <button v-on:click="appendOperation()">Append</button>
+        <div class="field has-addons">
+            <div class="control">
+                <input class="input" type="text" id="append_operation" v-model="new_operation" placeholder="A new item">
+            </div>
+            <div class="control">
+                <a class="button" v-on:click="appendOperation()">
+                    Append
+                </a>
+            </div>
         </div>
     `,
 
