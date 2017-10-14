@@ -8,7 +8,9 @@ Vue.component('stats', {
                     (( months[month] )) (( year ))
                 <button v-on:click="nextMonth()">&gt;</button>
             </div>
-            <canvas id="mychart" ref="mychart" width="400" height="180"></canvas>
+            <div id="chart">
+                <canvas id="mychart" ref="mychart" width="400" height="180"></canvas>
+            </div>
         </div>
     `,
 
@@ -85,31 +87,35 @@ Vue.component('stats', {
         createChart: function () {
             let self = this;
             try {
-                myChart.destroy();
+                this.myChart.destroy();
             } 
             catch (e) {}
-            let myChart = new Chart(self.$refs.mychart.getContext('2d'), {
-                type: 'bar',
-                data: self.stats,
-                options: {
-                    tooltips: {
-                        mode: 'index',
-                        intersect: false
-                    },
-                    responsive: true,
-                    scales: {
-                        xAxes: [{
-                            stacked: true,
-                        }],
-                        yAxes: [{
-                            stacked: true,
-                            ticks: {
-                                beginAtZero:true
-                            }
-                        }]
+            //if (this.myChart === null) {
+                this.myChart = new Chart(self.$refs.mychart.getContext('2d'), {
+                    type: 'bar',
+                    data: self.stats,
+                    options: {
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false
+                        },
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                            }],
+                            yAxes: [{
+                                stacked: true,
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
                     }
-                }
-            })
+                })
+            //} else {
+                //this.myChart.update();
+            //}
         },
 
         parseStats: function(raw_stats) {
