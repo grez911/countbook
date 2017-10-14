@@ -1,9 +1,9 @@
 Vue.component('operations-list', {
     template: `
         <div>
-            <div v-for="op in today" v-if="op[2] == true">
-                (( op[1] )) - (( op[3] ))
-                <button v-on:click="append_record(op[0])">+</button>
+            <div v-for="op in today" v-if="op['show'] == true">
+                (( op['name'] )) - (( op['count'] ))
+                <button v-on:click="append_record(op['id'])">+</button>
             </div>
         </div>
     `,
@@ -30,8 +30,8 @@ Vue.component('operations-list', {
             )
         );
         bus.$on('websocket_message', (response) => {
-            if (response[0] == 'get_day') {
-                this.today = response.slice(1);
+            if (response['type'] == 'get_day') {
+                this.today = response['data'];
             }
         })
     },
@@ -57,8 +57,6 @@ Vue.component('append-operation', {
             <button v-on:click="append_operation()">Append</button>
         </div>
     `,
-
-    delimiters: ['((', '))'],
 
     data() {
         return {

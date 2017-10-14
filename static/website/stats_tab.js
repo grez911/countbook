@@ -15,21 +15,21 @@ Vue.component('stats', {
     },
 
     mounted: function() {
-        bus.$on('websocket_ready', () => 
-            ws.send(
-                JSON.stringify({
-                    operation: 'get_month',
-                    params: {
-                        year: year,
-                        month: month
-                    }
-                })
-            )
-        );
         bus.$on('websocket_message', (response) => {
-            if (response['type'] == 'get_month' || response['type'] == 'get_day') {
+            if (response['type'] == 'get_month') {
                 this.parseStats(response['data']);
                 this.createChart();
+            }
+            if (response['type'] == 'get_day') {
+                ws.send(
+                    JSON.stringify({
+                        operation: 'get_month',
+                        params: {
+                            year: year,
+                            month: month
+                        }
+                    })
+                )
             }
         })
     },

@@ -1,15 +1,13 @@
 import json
 import datetime
 import calendar
-from django.core import serializers
 from django.db.models import Count
 
 from .models import Operation, Record
 
 def get_day(year=None, month=None, day=None):
     '''
-    Returns list of list [id, name, show, day_count]
-    for every operation in Operation model
+    Returns day statistics
     '''
     if year == None and month == None and day == None:
         date = datetime.datetime.now()
@@ -28,23 +26,38 @@ def get_day(year=None, month=None, day=None):
     operations = {op.id: {'name': op.name, 'show': op.show}
         for op in Operation.objects.all()}
 
-    result = ["get_day"]
+    result = {'type': 'get_day', 'data': []}
 
     for opkey, opvalue in operations.items():
         try:
-            result.append([opkey, opvalue['name'], opvalue['show'],
-                day_records[opkey]['count']])
+            result['data'].append({
+                'id': opkey,
+                'name': opvalue['name'],
+                'show': opvalue['show'],
+                'count': day_records[opkey]['count']
+            })
         except:
-            result.append([opkey, opvalue['name'], opvalue['show'], 0])
+            result['data'].append({
+                'id': opkey,
+                'name': opvalue['name'],
+                'show': opvalue['show'],
+                'count': 0
+            })
 
     result = json.dumps(result)
     return result
 
 def append_record(id):
+    '''
+    Appends a record to the database
+    '''
     record = Record(operation=Operation.objects.get(id=id))
     record.save()
 
 def append_operation(name):
+    '''
+    Appends an operation to the database
+    '''
     record = Operation(show=True, name=name)
     record.save()
 
