@@ -74,16 +74,19 @@ Vue.component('stats', {
             for (let day in raw_stats[0]['stats']) {
                 this.stats['labels'].push(day);
             }
+            let palet = palette(['tol', 'qualitative'], raw_stats.length);
+            let i = 0;
             raw_stats.forEach((op) => {
                 let cur_dataset = {
                     label: op['name'],
-                    backgroundColor: 'rgba(255, 99, 132, 0.4)',
+                    backgroundColor: '#' + palet[i],
                     data: []
                 };
                 for (let day in op['stats']) {
                     cur_dataset['data'].push(op['stats'][day]);
                 };
                 this.stats['datasets'].push(cur_dataset);
+                i++;
             });
         }
     }
