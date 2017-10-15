@@ -2,7 +2,7 @@
 
 ## Description
 
-A simple one-page site to record different dayly statistics, e.g. product sales, performed operations at work, etc.
+A simple one-page site for recording different daily statistics, e.g. product sales, performed operations at work, etc.
 
 ## Technology stack
 
