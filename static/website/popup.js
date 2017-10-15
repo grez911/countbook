@@ -13,7 +13,7 @@ Vue.component('popup', {
                     (( text ))
                 </section>
                 <footer class="modal-card-foot">
-                    <button class="button is-danger" v-if="type === 'delete'">Delete</button>
+                    <button class="button is-danger" v-if="type === 'delete'" v-on:click="del()">Delete</button>
                     <button class="button" v-if="type === 'delete'" v-on:click="close()">Cancel</button>
                     <button class="button is-primary" v-if="type === 'error'" v-on:click="close()">OK</button>
                 </footer>
@@ -28,6 +28,7 @@ Vue.component('popup', {
             title: null,
             text: null,
             type: null,
+            id: null,
             show: false
         };
     },
@@ -38,11 +39,26 @@ Vue.component('popup', {
             this.title = params['title'];
             this.text = params['text'];
             this.type = params['type'];
+            if (this.type === 'delete') {
+                this.id = params['id'];
+            }
         })
     },
 
     methods: {
         close() {
+            this.show = false;
+        },
+
+        del() {
+            ws.send(
+                JSON.stringify({
+                    type: 'del_operation',
+                    params: {
+                        id: this.id
+                    }
+                })
+            );
             this.show = false;
         }
     }
