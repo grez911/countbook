@@ -3,10 +3,10 @@
 Vue.component('stats', {
     template: `
         <div>
-            <div>
-                <button v-on:click="prevMonth()">&lt;</button>
-                    (( months[month] )) (( year ))
-                <button v-on:click="nextMonth()">&gt;</button>
+            <div class="month has-text-centered">
+                <a v-on:click="prevMonth()"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+                    &nbsp;(( months[month] )) - (( year ))&nbsp;
+                <a v-on:click="nextMonth()"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
             </div>
             <div id="chart">
                 <canvas id="mychart" ref="mychart" width="400" height="180"></canvas>
