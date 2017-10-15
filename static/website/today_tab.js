@@ -14,7 +14,7 @@ Vue.component('today', {
             </div>
             <div class="field has-addons">
                 <div class="control">
-                    <input class="input" type="text" id="append_operation" v-model="new_operation" placeholder="A new item">
+                    <input class="input" type="text" id="append_operation" v-model="new_operation" placeholder="A new item" v-on:keyup.enter="appendOperation()">
                 </div>
                 <div class="control">
                     <a class="button" v-on:click="appendOperation()">
