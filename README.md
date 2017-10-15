@@ -12,7 +12,9 @@ A simple one-page site for recording different daily statistics, e.g. product sa
 - Daphne
 - Django + IPC channel backend
 - SQLite
-- Vue.js + Bulma + Font Awesome + Chart.js
+- Vue.js
+- Native JavaScript WebSockets
+- Bulma + Font Awesome + Chart.js
 
 ## Screenshots
 
