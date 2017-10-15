@@ -90,32 +90,28 @@ Vue.component('stats', {
                 this.myChart.destroy();
             } 
             catch (e) {}
-            //if (this.myChart === null) {
-                this.myChart = new Chart(self.$refs.mychart.getContext('2d'), {
-                    type: 'bar',
-                    data: self.stats,
-                    options: {
-                        tooltips: {
-                            mode: 'index',
-                            intersect: false
-                        },
-                        responsive: true,
-                        scales: {
-                            xAxes: [{
-                                stacked: true,
-                            }],
-                            yAxes: [{
-                                stacked: true,
-                                ticks: {
-                                    beginAtZero:true
-                                }
-                            }]
-                        }
+            this.myChart = new Chart(self.$refs.mychart.getContext('2d'), {
+                type: 'bar',
+                data: self.stats,
+                options: {
+                    tooltips: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            stacked: true,
+                        }],
+                        yAxes: [{
+                            stacked: true,
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
                     }
-                })
-            //} else {
-                //this.myChart.update();
-            //}
+                }
+            })
         },
 
         parseStats: function(raw_stats) {

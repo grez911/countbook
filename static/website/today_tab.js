@@ -1,6 +1,6 @@
 "use strict";
 
-Vue.component('operations-list', {
+Vue.component('today', {
     template: `
         <div>
             <div v-for="op in today" v-if="op['show'] == true">
@@ -12,6 +12,16 @@ Vue.component('operations-list', {
                     <i class="fa fa-plus-circle" aria-hidden="true"></i>
                 </a>
             </div>
+            <div class="field has-addons">
+                <div class="control">
+                    <input class="input" type="text" id="append_operation" v-model="new_operation" placeholder="A new item">
+                </div>
+                <div class="control">
+                    <a class="button" v-on:click="appendOperation()">
+                        Append
+                    </a>
+                </div>
+            </div>
         </div>
     `,
 
@@ -22,7 +32,8 @@ Vue.component('operations-list', {
             today: '',
             year: new Date().getFullYear(),
             month: new Date().getMonth() + 1,
-            day: new Date().getDate()
+            day: new Date().getDate(),
+            new_operation: ''
         };
     },
 
@@ -40,7 +51,7 @@ Vue.component('operations-list', {
             )
         );
         bus.$on('websocket_message', (response) => {
-            if (response['type'] == 'get_day') {
+            if (response['type'] === 'get_day') {
                 this.today = response['data'];
             }
         })
@@ -67,32 +78,29 @@ Vue.component('operations-list', {
                     }
                 })
             );
-        }
-    }
-});
+        },
 
-Vue.component('append-operation', {
-    template: `
-        <div class="field has-addons">
-            <div class="control">
-                <input class="input" type="text" id="append_operation" v-model="new_operation" placeholder="A new item">
-            </div>
-            <div class="control">
-                <a class="button" v-on:click="appendOperation()">
-                    Append
-                </a>
-            </div>
-        </div>
-    `,
-
-    data() {
-        return {
-            new_operation: ''
-        };
-    },
-
-    methods: {
         appendOperation() {
+            let stop = false;
+            if (this.new_operation === '') {
+                bus.$emit('show_popup', {
+                    'title': 'Error',
+                    'text': 'Please, enter a name.',
+                    'type': 'error'
+                });
+                stop = true;
+            }
+            this.today.forEach((op) => {
+                if (this.new_operation === op['name']) {
+                    bus.$emit('show_popup', {
+                        'title': 'Error',
+                        'text': 'The item already exists. Please, enter a different name.',
+                        'type': 'error'
+                    });
+                    stop = true;
+                }
+            });
+            if (stop === true) return;
             ws.send(
                 JSON.stringify({
                     type: 'append_operation',
