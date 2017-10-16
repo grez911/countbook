@@ -24,7 +24,7 @@ def ws_message(message):
     elif request['type'] == 'get_month':
         year = request['params']['year']
         month = request['params']['month']
-        Group('general').send({
+        message.reply_channel.send({
             'text': get_month(year, month)
         })
     elif request['type'] == 'del_operation':
