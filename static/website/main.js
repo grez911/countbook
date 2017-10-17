@@ -1,6 +1,6 @@
 "use strict";
 
-let ws = new WebSocket('ws://' + window.location.host);
+let ws = new ReconnectingWebSocket('ws://' + window.location.host);
 let bus = new Vue();
 
 new Vue({

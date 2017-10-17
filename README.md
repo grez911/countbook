@@ -13,7 +13,7 @@ A simple one-page site for recording different daily statistics, e.g. product sa
 - Django + IPC channel backend
 - SQLite
 - Vue.js
-- Native JavaScript WebSockets
+- ReconnectingWebSocket
 - Bulma + Font Awesome + Chart.js
 
 ## Screenshots
