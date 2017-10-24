@@ -49,12 +49,19 @@ Vue.component('today', {
                     }
                 })
             )
-        );
+        )
+        
         bus.$on('websocket_message', (response) => {
             if (response['type'] === 'get_day') {
                 this.today = response['data'];
             }
         })
+        
+        setInterval(() => { 
+            this.year = new Date().getFullYear() 
+            this.month = new Date().getMonth() + 1
+            this.day = new Date().getDate()
+        }, 60000)
     },
 
     methods: {
